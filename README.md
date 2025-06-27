@@ -7,7 +7,6 @@ Generates addresses that start, end, or contain your desired patterns (letters o
 
 ## Features
 - Logs private key
-- Logs Mnemonic phrase
 - Optional case sensitive
 - Find patterns at: Start, End, Contain, Start and End, Start or End
 
