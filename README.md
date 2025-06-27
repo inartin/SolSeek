@@ -30,9 +30,8 @@ cd SolSeek
 cargo build --release
 ```
 
-## Usage
+## Usage Examples
 
-### Start and End Pattern Matching (New!)
 ```bash
 # Find address starting with "S01" AND ending with "SEEK"
 ./target/release/solana_vanity_generator --start S01 --end SEEK
@@ -43,24 +42,11 @@ cargo build --release
 # Find address only ending with pattern
 ./target/release/solana_vanity_generator --end SEEK
 
-# Case-insensitive search (matches "seek", "Seek", "SEEK", etc.)
-./target/release/solana_vanity_generator --start SEEK --case-sensitive false
-
 # Case-sensitive search (matches only exact "SEEK")
 ./target/release/solana_vanity_generator --start SEEK --case-sensitive true
-```
-
-### Usage Examples
-```bash
-# Specific start/end patterns
-./target/release/solana_vanity_generator --start S01 --end SEEK
-
-# Case-insensitive matching
-./target/release/solana_vanity_generator --start SEEK --case-sensitive false
 
 # Multiple patterns with position control
 ./target/release/solana_vanity_generator --position start S01SEEK SEEK F0RGE
-
 ```
 
 ### Example Output
@@ -167,5 +153,4 @@ If you find `SolSeek` useful, please consider sending a donation. It is greatly 
 **Solana (SOL) Address:**
 ```
 SeekdpXKdgHskzcCmTSvmJbuGpfzhrnog5UkBdGWg5i
-
 ```
