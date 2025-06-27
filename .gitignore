@@ -1,0 +1,47 @@
+# Rust build artifacts
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local
+
+# Backup files
+*.bak
+*.backup
+
+# Private keys (IMPORTANT!)
+*.key
+*.pem
+private_keys.txt
+secrets.txt
+wallets.json
+wallets.txt
+
+# Output files
+found_addresses.txt
+results.txt
