@@ -5,6 +5,7 @@ use std::sync::{Arc, atomic::{AtomicU64, AtomicBool, Ordering}};
 use std::thread;
 use std::io::{self, Write};
 use rayon::prelude::*;
+use bip39::{Mnemonic, Language};
 
 // Helper function to format large numbers
 fn format_number(num: f64) -> String {
@@ -278,7 +279,7 @@ fn main() {
     let start_time = Instant::now();
     let attempts = Arc::new(AtomicU64::new(0));
     let found = Arc::new(AtomicBool::new(false));
-    let found_keypair = Arc::new(parking_lot::Mutex::new(None::<(String, String, String, String, String)>));
+    let found_keypair = Arc::new(parking_lot::Mutex::new(None::<(String, String, String, String, String, String)>));
 
     println!("Solana Vanity Address Generator");
 
@@ -364,6 +365,13 @@ fn main() {
                         found.store(true, Ordering::Relaxed);
                         let private_key = bs58::encode(keypair.to_bytes()).into_string();
 
+                        // Generate mnemonic phrase from keypair entropy
+                        let keypair_bytes = keypair.to_bytes();
+                        let mnemonic_phrase = match Mnemonic::from_entropy(&keypair_bytes[..32], Language::English) {
+                            Ok(mnemonic) => mnemonic.phrase().to_string(),
+                            Err(_) => "Unable to generate mnemonic".to_string(),
+                        };
+
                         // Determine the matched pattern description
                         let pattern_desc = match (&config.start_pattern, &config.end_pattern) {
                             (Some(start), Some(end)) => format!("start '{}' + end '{}'", start.pattern, end.pattern),
@@ -377,7 +385,8 @@ fn main() {
                             position,
                             actual_match,
                             pubkey,
-                            private_key
+                            private_key,
+                            mnemonic_phrase
                         ));
                         attempts.fetch_add(local_attempts, Ordering::Relaxed);
                         return;
@@ -400,7 +409,7 @@ fn main() {
     });
 
     let result = found_keypair.lock().clone();
-    if let Some((matched_pattern, position, actual_match, pubkey, private_key)) = result {
+    if let Some((matched_pattern, position, actual_match, pubkey, private_key, mnemonic_phrase)) = result {
         let elapsed_time = start_time.elapsed().as_secs_f64();
         let total_attempts = attempts.load(Ordering::Relaxed);
 
@@ -409,7 +418,8 @@ fn main() {
         println!("Match position: {}", position);
         println!("Actual match: {}", actual_match);
         println!("Public Key: {}", pubkey);
-        println!("Secret Key: {}", private_key);
+        println!("Secret Key (Base58): {}", private_key);
+        println!("Secret Key (Mnemonic): {}", mnemonic_phrase);
         println!("Total attempts: {}", total_attempts);
         println!("Time taken: {}", format_duration(elapsed_time));
         println!("Speed: {} addresses/second", format_number(total_attempts as f64 / elapsed_time));

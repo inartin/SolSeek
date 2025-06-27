@@ -2,7 +2,14 @@
 
 # Solana Vanity Address Generator
 
-Fast Rust-based vanity address generator for Solana. Generates addresses that start, end, or contain your desired patterns. Supports searching for addresses with specific patterns at both the beginning and end simultaneously.
+CPU Rust-based vanity address generator for Solana.
+Generates addresses that start, end, or contain your desired patterns (letters or numbers).
+
+## Features
+- Logs private key
+- Logs Mnemonic phrase
+- Optional case sensitive
+- Find patterns at: Start, End, Contain, Start and End, Start or End
 
 ## Performance
 Tested on MacBook Pro M1 Pro 16" (8 CPU cores):
@@ -33,20 +40,21 @@ cargo build --release
 ## Usage Examples
 
 ```bash
-# Find address starting with "S01" AND ending with "SEEK"
-./target/release/solana_vanity_generator --start S01 --end SEEK
+# Find address starting with "SO1" AND ending with "SEEK"
+./run.sh --start SO1 --end SEEK
+# OR: ./target/release/solana_vanity_generator --start SO1 --end SEEK
 
 # Find address only starting with pattern
-./target/release/solana_vanity_generator --start S01SEEK
+./run.sh --start SO1SEEK
 
 # Find address only ending with pattern
-./target/release/solana_vanity_generator --end SEEK
+./run.sh --end SEEK
 
 # Case-sensitive search (matches only exact "SEEK")
-./target/release/solana_vanity_generator --start SEEK --case-sensitive true
+./run.sh --start SEEK --case-sensitive true
 
 # Multiple patterns with position control
-./target/release/solana_vanity_generator --position start S01SEEK SEEK F0RGE
+./run.sh --position start SO1SEEK SEEK F0RGE
 ```
 
 ### Example Output
@@ -54,7 +62,7 @@ cargo build --release
 #### Start and End Pattern Example
 ```
 Solana Vanity Address Generator
-Start pattern: S01
+Start pattern: SO1
 End pattern: SEEK
 Mode: Both start and end patterns must match
 Case sensitive: true
@@ -63,10 +71,10 @@ Using 8 CPU threads with batch size 100000
 Attempts: 15.2M | Current Rate: 520.45K addr/sec | Avg Rate: 518.32K addr/sec | Running: 29s
 
 Found matching address!
-Matched pattern: start 'S01' + end 'SEEK'
-Match position: start 'S01' and end 'SEEK'
-Actual match: S01 ... SEEK
-Public Key: S01xxx...xxxSEEK
+Matched pattern: start 'SO1' + end 'SEEK'
+Match position: start 'SO1' and end 'SEEK'
+Actual match: SO1 ... SEEK
+Public Key: SO1xxx...xxxSEEK
 Secret Key: 5Kxxx...xxxxx
 Total attempts: 15,247,891
 Time taken: 29.4 seconds
@@ -99,7 +107,7 @@ Only use **Base58** characters in patterns:
 **Common substitutions:**
 - Use `1` instead of `l` or `I`
 - Use `o` instead of `0` 
-- For "SOL" use "S01"
+- For "SOL" use "SO1"
 - For "COOL" use "C001" or "C881"
 
 ### Security
@@ -113,7 +121,7 @@ Only use **Base58** characters in patterns:
 - **4-5 characters** = reasonable time
 - **6+ characters** = may take hours/days
 - **Start + End patterns** = significantly slower than single patterns (multiplicative difficulty)
-- **Example**: `--start S01 --end SEEK` is much harder than just `--start S01SEEK`
+- **Example**: `--start SO1 --end SEEK` is much harder than just `--start SO1SEEK`
 
 ## Troubleshooting
 
@@ -145,6 +153,9 @@ cargo build --release
 
 ## License
 Use at your own risk. No warranty provided.
+
+### Launch Script
+The `run.sh` script is a convenience wrapper that auto-builds and forwards arguments. Use `./run.sh` instead of the full `./target/release/solana_vanity_generator` command.
 
 ### ❤️ Support The Project
 
