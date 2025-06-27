@@ -22,10 +22,7 @@ source ~/.cargo/env
 
 ### Step 2: Clone/Download Code
 ```bash
-# If you have the code folder, navigate to it:
-cd rust_v
-
-# Or download from your source
+cd SolSeek
 ```
 
 ### Step 3: Build
@@ -53,34 +50,17 @@ cargo build --release
 ./target/release/solana_vanity_generator --start SEEK --case-sensitive true
 ```
 
-### Basic Usage (Legacy Mode)
+### Usage Examples
 ```bash
-# Search for addresses starting or ending with "S01SEEK" (default)
-./target/release/solana_vanity_generator S01SEEK
+# Specific start/end patterns
+./target/release/solana_vanity_generator --start S01 --end SEEK
 
-# Search for multiple patterns
-./target/release/solana_vanity_generator S01SEEK S01Seek SEEK
+# Case-insensitive matching
+./target/release/solana_vanity_generator --start SEEK --case-sensitive false
 
-# Search for different patterns
-./target/release/solana_vanity_generator S01 F0RGE SEEK
-```
+# Multiple patterns with position control
+./target/release/solana_vanity_generator --position start S01SEEK SEEK F0RGE
 
-### Position Control (Legacy Mode)
-```bash
-# Only at the START of address
-./target/release/solana_vanity_generator --position start S01SEEK
-
-# Only at the END of address
-./target/release/solana_vanity_generator --position end SEEK
-
-# At START OR END (default behavior)
-./target/release/solana_vanity_generator --position startorend S01SEEK
-
-# ANYWHERE in the address
-./target/release/solana_vanity_generator --position anywhere SEEK
-
-# Combine position with multiple patterns
-./target/release/solana_vanity_generator --position start S01SEEK S01 F0RGE
 ```
 
 ### Example Output
@@ -107,53 +87,18 @@ Time taken: 29.4 seconds
 Speed: 518,234 addresses/second
 ```
 
-#### Legacy Pattern Example
-```
-Solana Vanity Address Generator
-Using command line patterns: S01SEEK
-Match position: StartOrEnd
-Case sensitive: true
-Using 8 CPU threads with batch size 100000
-
-Attempts: 2.50M | Current Rate: 526.62K addr/sec | Avg Rate: 526.62K addr/sec | Running: 5s
-
-Found matching address!
-Matched pattern: S01SEEK
-Match position: start
-Actual match: S01SEEK
-Public Key: S01SEEKxxx...xxxxx
-Secret Key: 5Kxxx...xxxxx
-Total attempts: 3,247,891
-Time taken: 6.17 seconds
-Speed: 526,234 addresses/second
-```
-
 ## Command Line Options
 
-### New Pattern Matching Options
+### Pattern Matching Options
 - `--start PATTERN` - Find addresses starting with PATTERN
 - `--end PATTERN` - Find addresses ending with PATTERN
 - `--start PATTERN1 --end PATTERN2` - Find addresses starting with PATTERN1 AND ending with PATTERN2
 - `--case-sensitive true|false` - Control case sensitivity (default: true)
 
-### Legacy Options (Backward Compatible)
+### Other Options
 - `--position start|end|startorend|anywhere` - Control where to search for patterns
 - `PATTERN1 PATTERN2 ...` - Search for multiple patterns (any position based on --position)
 
-### Usage Examples
-```bash
-# New style - specific start/end patterns
-./target/release/solana_vanity_generator --start S01 --end SEEK
-
-# Case-insensitive matching
-./target/release/solana_vanity_generator --start SEEK --case-sensitive false
-
-# Legacy style - multiple patterns with position control
-./target/release/solana_vanity_generator --position start S01SEEK SEEK F0RGE
-
-# Mixed usage is supported
-./target/release/solana_vanity_generator --start S01 --case-sensitive true
-```
 
 ## Important Notes
 
@@ -167,7 +112,7 @@ Only use **Base58** characters in patterns:
 
 **Common substitutions:**
 - Use `1` instead of `l` or `I`
-- Use `0` is not valid, but you can use other numbers like `8` or `9`
+- Use `o` instead of `0` 
 - For "SOL" use "S01"
 - For "COOL" use "C001" or "C881"
 
@@ -206,15 +151,6 @@ cargo build --release
 - Ensure you're using `--release` build
 - Check CPU temperature (throttling)
 
-## Customization
-
-Edit `src/main.rs` to change default patterns:
-```rust
-// Change this line at the top of the file
-const POSSIBLE_PATTERNS: &[&str] = &["S01", "SEEK"];
-```
-
-Then rebuild: `cargo build --release`
 
 ## Platform Support
 - ✅ **macOS** (Intel & M1)
@@ -230,5 +166,6 @@ If you find `SolSeek` useful, please consider sending a donation. It is greatly 
 
 **Solana (SOL) Address:**
 ```
+SeekdpXKdgHskzcCmTSvmJbuGpfzhrnog5UkBdGWg5i
 
 ```
